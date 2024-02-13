@@ -22,15 +22,17 @@ Data caching simplifies and speeds up computation pipelines.
 - streamlit run homeloanapproval-ui.py
 
 # Deploy to streamlit cloud
-- pip freeze > requirement.txt
+- pip freeze > requirements.txt
 - git add .
 - git commit -m "requirements.txt"
 - git push
+
+# url
 - [link] (https://homeloanaproval-app-tj8m5tymqnvogsqfxwuxil.streamlit.app/)
 
 # References
 
-[Link] (https://www.datacamp.com/tutorial/streamlit)
-[Dataset] (https://www.kaggle.com/datasets/rishikeshkonapure/home-loan-approval)
-[Prediction] (https://www.kaggle.com/code/srikanth917/home-loan-approval-prediction)
-[Saving Model] (https://practicaldatascience.co.uk/machine-learning/how-to-save-and-load-machine-learning-models-using-pickle#:~:text=Save%20the%20model%20with%20Pickle,pkl%20.)
+- [Link] (https://www.datacamp.com/tutorial/streamlit)
+- [Dataset] (https://www.kaggle.com/datasets/rishikeshkonapure/home-loan-approval)
+- [Prediction] (https://www.kaggle.com/code/srikanth917/home-loan-approval-prediction)
+- [Saving Model] (https://practicaldatascience.co.uk/machine-learning/how-to-save-and-load-machine-learning-models-using-pickle#:~:text=Save%20the%20model%20with%20Pickle,pkl%20.)
