@@ -32,7 +32,7 @@ if app_mode=='Home':
     st.bar_chart(data[['ApplicantIncome','LoanAmount']].head(20))
 elif app_mode == 'Prediction':    
     #st.image('slider-short-3.jpg')    
-    st.subheader('Sir/Mme , YOU need to fill all necessary informations in order    to get a reply to your loan request !')    
+    st.subheader('YOU need to fill all necessary informations in order    to get a reply to your loan request !')    
     st.sidebar.header("Informations about the client :")    
     gender_dict = {"Male":1,"Female":2}    
     feature_dict = {"No":1,"Yes":2}    
@@ -81,9 +81,8 @@ elif app_mode == 'Prediction':
     'Property_Area':[Rural,Urban,Semiurban],
     }
 
-    feature_list=[ApplicantIncome,CoapplicantIncome,LoanAmount,Loan_Amount_Term,Credit_History,get_value(Gender,gender_dict),get_fvalue(Married),data1['Dependents'][0],data1['Dependents'][1],data1['Dependents'][2],data1['Dependents'][3],get_value(Education,edu),get_fvalue(Self_Employed),data1['Property_Area'][0],data1['Property_Area'][1],data1['Property_Area'][2]]
-
-    single_sample = np.array(feature_list).reshape(1,-1)
+    #feature_list=[ApplicantIncome,CoapplicantIncome,LoanAmount,Loan_Amount_Term,Credit_History,get_value(Gender,gender_dict),get_fvalue(Married),data1['Dependents'][0],data1['Dependents'][1],data1['Dependents'][2],data1['Dependents'][3],get_value(Education,edu),get_fvalue(Self_Employed),data1['Property_Area'][0],data1['Property_Area'][1],data1['Property_Area'][2]]
+    #single_sample = np.array(feature_list).reshape(1,-1)
 
     if st.button("Predict"):
         file_ = open("6m-rain.gif", "rb")
@@ -95,24 +94,62 @@ elif app_mode == 'Prediction':
         contents = file.read()
         data_url_no = base64.b64encode(contents).decode("utf-8")
         file.close()
+
+        print("-Preaparing input-")
+
+        # assign data of lists.  
+        data = {'Married': get_fvalue(Married), 'Dependents': 2, \
+                'Education': get_value(Education,edu), 'Self_Employed':get_fvalue(Self_Employed), \
+                'LoanAmount': LoanAmount, 'Loan_Amount_Term': Loan_Amount_Term, \
+                'Credit_History': Credit_History, 'Total_Income':  ApplicantIncome + CoapplicantIncome, \
+                'Gender_Male': get_value(Gender,gender_dict), 'PA_Semiurban': Semiurban, \
+                'PA_Urban': Urban } 
+        
+       
+        #sample_data = {'Married': 1, 'Dependents': 2, \
+        #        'Education': 2, 'Self_Employed':2, \
+        #        'LoanAmount': 168.0, 'Loan_Amount_Term': 360, \
+        #        'Credit_History': 0.8, 'Total_Income':  6783.0, \
+        #        'Gender_Male': 0, 'PA_Semiurban': 1, \
+        #        'PA_Urban': 0 } 
+        
+        df = pd.DataFrame(data, index=[0])
+        print(type(df))
+        print(df.head())
+
+        #feature_list=[get_fvalue(Married), \
+        #             2, \
+        #             get_value(Education,edu), \
+        #             get_fvalue(Self_Employed), \
+        #             LoanAmount, \
+        #             Loan_Amount_Term, \
+        #             Credit_History, \
+        #             ApplicantIncome + CoapplicantIncome, \
+        #             get_value(Gender,gender_dict), \
+        #             Semiurban, \
+        #             Urban
+        #            ]
+        #single_sample = np.array(feature_list).reshape(1,-1)
+        #print(type(feature_list))
+        #print(type(single_sample))
    
         pickled_model = pickle.load(open('models/model.pkl', 'rb'))
-        #pickled_model.predict(X_test)
-   
-        #loaded_model = pickle.load(open('Random_Forest.sav', 'rb'))
-        prediction = pickled_model.predict(single_sample)
-        if prediction[0] == 0 :
+        #prediction = pickled_model.predict(single_sample)
+        prediction = pickled_model.predict(df)
+        print("prediction={0}".format(prediction[0]))
+
+        if prediction[0] == 1 :
+            st.success(
+    'Congratulations!! you will get the loan from Bank'
+    )
+            st.markdown(
+    f'<img src="data:image/gif;base64,{data_url}" alt="cat gif">',
+    unsafe_allow_html=True,)
+        else:
             st.error(
     'According to our Calculations, you will not get the loan from Bank'
     )
             st.markdown(
     f'<img src="data:image/gif;base64,{data_url_no}" alt="cat gif">',
     unsafe_allow_html=True,)
-        elif prediction[0] == 1 :
-            st.success(
-    'Congratulations!! you will get the loan from Bank'
-    )
-            st.markdown(
-    f'<img src="data:image/gif;base64,{data_url}" alt="cat gif">',
-    unsafe_allow_html=True,
-    )
+    
