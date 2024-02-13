@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import pickle
 import base64
-import sklearn
+#import sklearn
 
 @st.cache_data
 def get_fvalue(val):    

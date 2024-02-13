@@ -21,6 +21,9 @@ Data caching simplifies and speeds up computation pipelines.
 ## run
 - streamlit run homeloanapproval-ui.py
 
+# Deploy to streamlit cloud
+- [link] (https://homeloanaproval-app-tj8m5tymqnvogsqfxwuxil.streamlit.app/)
+
 # References
 
 [Link] (https://www.datacamp.com/tutorial/streamlit)
