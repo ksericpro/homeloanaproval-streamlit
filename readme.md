@@ -13,7 +13,13 @@ Less code is needed to create amazing web apps.
 Data caching simplifies and speeds up computation pipelines.
 
 # Setup
+
+## install dependencies
+- pip install matplotlib
 - pip install scikit-learn==1.2.2
+
+## run
+- streamlit run homeloanapproval-ui.py
 
 # References
 
