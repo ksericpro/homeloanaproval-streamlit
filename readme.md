@@ -22,6 +22,10 @@ Data caching simplifies and speeds up computation pipelines.
 - streamlit run homeloanapproval-ui.py
 
 # Deploy to streamlit cloud
+- pip freeze > requirement.txt
+- git add .
+- git commit -m "requirements.txt"
+- git push
 - [link] (https://homeloanaproval-app-tj8m5tymqnvogsqfxwuxil.streamlit.app/)
 
 # References
