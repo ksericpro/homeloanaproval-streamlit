@@ -4,9 +4,7 @@ import numpy as np
 import pickle
 import base64
 import sklearn
-#from sklearn import model_selection
 
-#@st.cache(suppress_st_warning=True)
 @st.cache_data
 def get_fvalue(val):    
     feature_dict = {"No":1,"Yes":2}    
@@ -20,7 +18,9 @@ def get_value(val,my_dict):
             return value
 
 app_mode = st.sidebar.selectbox('Select Page',['Home','Prediction']) #two pages
-#st.title ("This is a ML page")
+st.title ("This is a Home Loan Prediction page")
+st.caption("Useing Scikit Learn Random Forest Classifier")
+APPROVED = 1
 
 if app_mode=='Home':   
     st.title('LOAN PREDICTION :')      
@@ -49,15 +49,16 @@ elif app_mode == 'Prediction':
     Dependents=st.sidebar.radio('Dependents',options=['0','1' , '2' , '3+'])    
     Education=st.sidebar.radio('Education',tuple(edu.keys()))    
     Property_Area=st.sidebar.radio('Property_Area',tuple(prop.keys()))   
-    class_0 , class_3 , class_1,class_2 = 0,0,0,0    
+   # class_0 , class_3 , class_1,class_2 = 0,0,0,0   
+    dependents_class = 0 
     if Dependents == '0':        
-        class_0 = 1   
+        dependents_class = 0   
     elif Dependents == '1':        
-        class_1 = 1    
+        dependents_class = 1    
     elif Dependents == '2' :        
-        class_2 = 1    
+        dependents_class = 2    
     else:        
-        class_3= 1    
+        dependents_class = 3    
     
     Rural,Urban,Semiurban=0,0,0    
     if Property_Area == 'Urban' :        
@@ -66,23 +67,6 @@ elif app_mode == 'Prediction':
         Semiurban = 1    
     else :        
         Rural=1
-
-    data1={
-    'Gender':Gender,
-    'Married':Married,
-    'Dependents':[class_0,class_1,class_2,class_3],
-    'Education':Education,
-    'ApplicantIncome':ApplicantIncome,
-    'CoapplicantIncome':CoapplicantIncome,
-    'Self Employed':Self_Employed,
-    'LoanAmount':LoanAmount,
-    'Loan_Amount_Term':Loan_Amount_Term,
-    'Credit_History':Credit_History,
-    'Property_Area':[Rural,Urban,Semiurban],
-    }
-
-    #feature_list=[ApplicantIncome,CoapplicantIncome,LoanAmount,Loan_Amount_Term,Credit_History,get_value(Gender,gender_dict),get_fvalue(Married),data1['Dependents'][0],data1['Dependents'][1],data1['Dependents'][2],data1['Dependents'][3],get_value(Education,edu),get_fvalue(Self_Employed),data1['Property_Area'][0],data1['Property_Area'][1],data1['Property_Area'][2]]
-    #single_sample = np.array(feature_list).reshape(1,-1)
 
     if st.button("Predict"):
         file_ = open("6m-rain.gif", "rb")
@@ -98,47 +82,41 @@ elif app_mode == 'Prediction':
         print("-Preparing input-")
 
         # assign data of lists.  
-        data = {'Married': get_fvalue(Married), 'Dependents': 2, \
-                'Education': get_value(Education,edu), 'Self_Employed':get_fvalue(Self_Employed), \
-                'LoanAmount': LoanAmount, 'Loan_Amount_Term': Loan_Amount_Term, \
-                'Credit_History': Credit_History, 'Total_Income':  ApplicantIncome + CoapplicantIncome, \
-                'Gender_Male': get_value(Gender,gender_dict), 'PA_Semiurban': Semiurban, \
-                'PA_Urban': Urban } 
-        
-       
-        #sample_data = {'Married': 1, 'Dependents': 2, \
-        #        'Education': 2, 'Self_Employed':2, \
-        #        'LoanAmount': 168.0, 'Loan_Amount_Term': 360, \
-        #        'Credit_History': 0.8, 'Total_Income':  6783.0, \
-        #        'Gender_Male': 0, 'PA_Semiurban': 1, \
-        #        'PA_Urban': 0 } 
-        
-        df = pd.DataFrame(data, index=[0])
-        print(type(df))
-        print(df.head())
+        #data = {'Married': get_fvalue(Married), 'Dependents': dependents_class, \
+        #        'Education': get_value(Education,edu), 'Self_Employed':get_fvalue(Self_Employed), \
+        #        'LoanAmount': LoanAmount, 'Loan_Amount_Term': Loan_Amount_Term, \
+        #        'Credit_History': Credit_History, 'Total_Income':  ApplicantIncome + CoapplicantIncome, \
+        #        'Gender_Male': get_value(Gender,gender_dict), 'PA_Semiurban': Semiurban, \
+        #        'PA_Urban': Urban } 
 
-        #feature_list=[get_fvalue(Married), \
-        #             2, \
-        #             get_value(Education,edu), \
-        #             get_fvalue(Self_Employed), \
-        #             LoanAmount, \
-        #             Loan_Amount_Term, \
-        #             Credit_History, \
-        #             ApplicantIncome + CoapplicantIncome, \
-        #             get_value(Gender,gender_dict), \
-        #             Semiurban, \
-        #             Urban
-        #            ]
-        #single_sample = np.array(feature_list).reshape(1,-1)
+        
+        #df = pd.DataFrame(data, index=[0])
+        #print(type(df))
+        #print(df.head())
+
+        feature_list=[get_fvalue(Married), \
+                     dependents_class, \
+                     get_value(Education,edu), \
+                     get_fvalue(Self_Employed), \
+                     LoanAmount, \
+                     Loan_Amount_Term, \
+                     Credit_History, \
+                     ApplicantIncome + CoapplicantIncome, \
+                     get_value(Gender,gender_dict), \
+                     Semiurban, \
+                     Urban
+                    ]
+        # convert to 1D
+        single_sample = np.array(feature_list).reshape(1,-1)
         #print(type(feature_list))
-        #print(type(single_sample))
+        print(type(single_sample))
    
         pickled_model = pickle.load(open('models/model.pkl', 'rb'))
-        #prediction = pickled_model.predict(single_sample)
-        prediction = pickled_model.predict(df)
+        prediction = pickled_model.predict(single_sample) # use numpy
+        #prediction = pickled_model.predict(df) # use dataframe
         print("{0} prediction={1}".format(type(prediction),prediction[0]))
 
-        if prediction[0] == 1 :
+        if prediction[0] == APPROVED :
             st.success(
     'Congratulations!! you will get the loan from Bank'
     )
