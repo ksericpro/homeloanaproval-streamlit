@@ -95,7 +95,7 @@ elif app_mode == 'Prediction':
         data_url_no = base64.b64encode(contents).decode("utf-8")
         file.close()
 
-        print("-Preaparing input-")
+        print("-Preparing input-")
 
         # assign data of lists.  
         data = {'Married': get_fvalue(Married), 'Dependents': 2, \
@@ -136,7 +136,7 @@ elif app_mode == 'Prediction':
         pickled_model = pickle.load(open('models/model.pkl', 'rb'))
         #prediction = pickled_model.predict(single_sample)
         prediction = pickled_model.predict(df)
-        print("prediction={0}".format(prediction[0]))
+        print("{0} prediction={1}".format(type(prediction),prediction[0]))
 
         if prediction[0] == 1 :
             st.success(
