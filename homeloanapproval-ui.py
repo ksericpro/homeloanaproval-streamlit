@@ -111,7 +111,7 @@ elif app_mode == 'Prediction':
         #print(type(feature_list))
         print(type(single_sample))
    
-        pickled_model = pickle.load(open('model.pkl', 'rb'))
+        pickled_model = pickle.load(open('models/model.pkl', 'rb'))
         prediction = pickled_model.predict(single_sample) # use numpy
         #prediction = pickled_model.predict(df) # use dataframe
         print("{0} prediction={1}".format(type(prediction),prediction[0]))
