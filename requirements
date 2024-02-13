@@ -38,7 +38,7 @@ referencing==0.33.0
 requests==2.31.0
 rich==13.7.0
 rpds-py==0.17.1
-#scikit-learn==1.2.2
+scikit-learn==1.2.2
 scipy==1.12.0
 six==1.16.0
 smmap==5.0.1
@@ -55,4 +55,3 @@ urllib3==2.2.0
 validators==0.22.0
 watchdog==4.0.0
 zipp==3.17.0
-scikit-learn
